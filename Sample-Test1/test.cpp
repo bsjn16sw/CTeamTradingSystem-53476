@@ -9,8 +9,8 @@ public:
 	MOCK_METHOD(void, buyStock, (string, int, int), (override));
 	MOCK_METHOD(void, sellStock, (string, int, int), (override));
 	MOCK_METHOD(int, getPrice, (string), (override));
-	MOCK_METHOD(pair<int, int>, buyStockNiceTiming, (string, int), (override));
-	MOCK_METHOD(pair<int, int>, sellStockNiceTiming, (string, int), (override));
+	MOCK_METHOD(bool, buyStockNiceTiming, (string, int), (override));
+	MOCK_METHOD(bool, sellStockNiceTiming, (string, int), (override));
 };
 
 class TestFixture : public testing::Test {
@@ -52,4 +52,69 @@ TEST_F(TestFixture, GetPrice) {
 
 	int ret = app->getPrice("stockid");
 	EXPECT_EQ(ret, 12345);
+}
+
+
+TEST_F(TestFixture, BuyNiceTimingIncreasingTrend) {
+    EXPECT_CALL(mk, getPrice, ("stockid"), ())
+        .Times(5)
+        .WillOnce(testing::Return(700))
+        .WillOnce(testing::Return(700))
+        .WillOnce(testing::Return(900))
+        .WillOnce(testing::Return(1000))
+        .WillOnce(testing::Return(1100));
+
+    EXPECT_CALL(mk, buyStock, ("stockid", 1100, 90)) // FLOOR(100000/1100) = 90
+        .Times(1); // CALLED
+
+    bool ret = app->buyNiceTiming("stockid", 100000); // TOTAL BUDGET = 100000
+    EXPECT_EQ(ret, true);
+}
+
+TEST_F(TestFixture, BuyNiceTimingNotIncreasingTrend) {
+    EXPECT_CALL(mk, getPrice, ("stockid"), ())
+        .Times(5)
+        .WillOnce(testing::Return(700))
+        .WillOnce(testing::Return(800))
+        .WillOnce(testing::Return(900))
+        .WillOnce(testing::Return(1000))
+        .WillOnce(testing::Return(900));
+
+    EXPECT_CALL(mk, buyStock)
+        .Times(0); // NOT CALLED
+
+    bool ret = app->buyNiceTiming("stockid", 100000); // TOTAL BUDGET = 100000
+    EXPECT_EQ(ret, false);
+}
+
+TEST_F(TestFixture, SellNiceTimingDecreasingTrend) {
+    EXPECT_CALL(mk, getPrice, ("stockid"), ())
+        .Times(5)
+        .WillOnce(testing::Return(1000))
+        .WillOnce(testing::Return(900))
+        .WillOnce(testing::Return(800))
+        .WillOnce(testing::Return(800))
+        .WillOnce(testing::Return(700));
+
+    EXPECT_CALL(mk, sellStock, ("stockid", 700, 10))
+        .Times(1); // CALLED
+
+    bool ret = app->buyNiceTiming("stockid", 10); // QUANTITY = 10
+    EXPECT_EQ(ret, true);
+}
+
+TEST_F(TestFixture, SellNiceTimingNotDecreasingTrend) {
+    EXPECT_CALL(mk, getPrice, ("stockid"), ())
+        .Times(5)
+        .WillOnce(testing::Return(1000))
+        .WillOnce(testing::Return(900))
+        .WillOnce(testing::Return(1200))
+        .WillOnce(testing::Return(800))
+        .WillOnce(testing::Return(700));
+
+    EXPECT_CALL(mk, sellStock)
+        .Times(0); // NOT CALLED
+
+    bool ret = app->buyNiceTiming("stockid", 10); // QUANTITY = 10
+    EXPECT_EQ(ret, false);
 }
