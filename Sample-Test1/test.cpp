@@ -20,7 +20,7 @@ public:
 		app->login("userid", "userpasswd");
 	}
 	Application* app = new Application();
-	MockDriver mk;
+	NiceMock<MockDriver> mk;
 	const int MAX_BUY_CNT = 10;
 };
 
