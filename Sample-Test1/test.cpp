@@ -34,21 +34,22 @@ TEST_F(TestFixture, LoginStockBrocker) {
 }
 
 TEST_F(TestFixture, BuyStock) {
-	app->buy("stockid", 1000, 10);
 	EXPECT_CALL(mk, buyStock, ("stockid", 1000, 10), ())
 		.Times(1);
+	app->buy("stockid", 1000, 10);
 }
 
 TEST_F(TestFixture, SellStock) {
-	app->sell("stockid", 1000, 10);
 	EXPECT_CALL(mk, sellStock, ("stockid", 1000, 10), ())
 		.Times(1);
+	app->sell("stockid", 1000, 10);
 }
 
 TEST_F(TestFixture, GetPrice) {
-	int ret = app->getPrice("stockid");
 	EXPECT_CALL(mk, getPrice, ("stockid"), ())
 		.Times(1)
-		.WillRepeatedly(12345);
+		.WillRepeatedly(testing::Return(12345));
+
+	int ret = app->getPrice("stockid");
 	EXPECT_EQ(ret, 12345);
 }
