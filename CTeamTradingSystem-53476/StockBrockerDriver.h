@@ -6,5 +6,6 @@ class StockBrockerDriver
 {
 public:
 	virtual void sellStock(string, int, int) = 0;
+	virtual void login(string, string) = 0;
 private:
 };

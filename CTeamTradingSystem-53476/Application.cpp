@@ -7,9 +7,13 @@ public:
 	{
 		stockbrockerdriver = sbd;
 	}
-	void sellStock(string stockCode, int price, int num)
+	void sell(string stockCode, int price, int num)
 	{
 		stockbrockerdriver->sellStock(stockCode, price, num);
+	}
+	void login(string userID, string userPassword)
+	{
+		stockbrockerdriver->login(userID, userPassword);
 	}
 private:
 	StockBrockerDriver* stockbrockerdriver;

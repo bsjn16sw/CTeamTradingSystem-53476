@@ -6,21 +6,6 @@
 #include "StockBrockerDriver.h"
 using namespace std;
 
-class NemoDriver : public StockBrockerDriver
-{
-public:
-public:
-	NemoDriver(NemoAPI nAPI) : nemoAPI{ nAPI }
-	{
-
-	}
-	void sellStock(string stockCode, int price, int num)
-	{
-		nemoAPI.sellingStock(stockCode, price, num);
-	}
-private:
-	NemoAPI nemoAPI;
-};
 class NemoAPI {
 public:
 	void certification(string ID, string pass) {
@@ -43,4 +28,23 @@ public:
 		int ret = rand() % 10 * 100 + 5000;
 		return ret;
 	}
+};
+
+class NemoDriver : public StockBrockerDriver
+{
+public:
+	NemoDriver(NemoAPI nAPI) : nemoAPI{ nAPI }
+	{
+
+	}
+	void sellStock(string stockCode, int price, int num)
+	{
+		nemoAPI.sellingStock(stockCode, price, num);
+	}
+	void login(string ID, string password) override
+	{
+		nemoAPI.certification(ID, password);
+	}
+private:
+	NemoAPI nemoAPI;
 };
