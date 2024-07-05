@@ -1,9 +1,25 @@
 #pragma once
+
 #include <iostream>
 #include <cstdlib>
 #include <string>
-
+#include "StockBrockerDriver.h"
 using namespace std;
+
+class KiwerDriver : public StockBrockerDriver
+{
+public:
+	KiwerDriver(KiwerAPI kAPI) : kiwerAPI{ kAPI }
+	{
+
+	}
+	void sellStock(string stockCode, int price, int num)
+	{
+		kiwerAPI.sell(stockCode, price, num);
+	}
+private:
+	KiwerAPI kiwerAPI;
+};
 class KiwerAPI {
 public:
 	void login(string ID, string password) {
@@ -24,3 +40,4 @@ public:
 		return ret;
 	}
 };
+

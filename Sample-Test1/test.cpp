@@ -2,6 +2,9 @@
 #include "gmock/gmock.h"
 #include "../CTeamTradingSystem-53476/Application.cpp"
 #include "../CTeamTradingSystem-53476/StockBrockerDriver.h"
+#include "../CTeamTradingSystem-53476/KiwerAPI.cpp"
+#include "../CTeamTradingSystem-53476/NemoAPI.cpp"
+#include <string>
 
 class MockDriver : public StockBrockerDriver {
 public:
