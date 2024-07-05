@@ -10,11 +10,11 @@ using namespace testing;
 class MockDriver : public StockBrockerDriver {
 public:
 	MOCK_METHOD(void, login, (string, string), (override));
-	//MOCK_METHOD(void, buyStock, (string, int, int), (override));
+	MOCK_METHOD(void, buyStock, (string, int, int), (override));
 	MOCK_METHOD(void, sellStock, (string, int, int), (override));
-	//MOCK_METHOD(int, getPrice, (string), (override));
-	//MOCK_METHOD(pair<int, int>, buyStockNiceTiming, (string, int), (override));
-	//MOCK_METHOD(pair<int, int>, sellStockNiceTiming, (string, int), (override));
+	MOCK_METHOD(int, getPrice, (string), (override));
+	MOCK_METHOD(pair<int, int>, buyStockNiceTiming, (string, int), (override));
+	MOCK_METHOD(pair<int, int>, sellStockNiceTiming, (string, int), (override));
 };
 
 class TestFixture : public testing::Test {
@@ -33,7 +33,7 @@ TEST_F(TestFixture, SellStock) {
 		.Times(1);
 	app->sell("stockid", 1000, 10);
 }
-#if 0
+
 TEST_F(TestFixture, MakeApplicationInstance) {
 	EXPECT_TRUE(app != nullptr);
 }
@@ -57,4 +57,3 @@ TEST_F(TestFixture, GetPrice) {
 	int ret = app->getPrice("stockid");
 	EXPECT_EQ(ret, 12345);
 }
-#endif
