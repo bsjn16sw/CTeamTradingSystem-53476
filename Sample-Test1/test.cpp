@@ -3,11 +3,11 @@
 #include "../CTeamTradingSystem-53476/Application.cpp"
 #include "../CTeamTradingSystem-53476/StockBrockerDriver.h"
 
-class MockDriver : public StockBrockerDrvier {
+class MockDriver : public StockBrockerDriver {
 public:
 	MOCK_METHOD(void, loginBrocker, (string, string), (override));
 	MOCK_METHOD(void, buyStock, (string, int, int), (override));
-	MOCK_METHOD(void, sellStock , (string, int, int), (override));
+	MOCK_METHOD(void, sellStock, (string, int, int), (override));
 	MOCK_METHOD(int, getPrice, (string), (override));
 	MOCK_METHOD(pair<int, int>, buyStockNiceTiming, (string, int), (override));
 	MOCK_METHOD(pair<int, int>, sellStockNiceTiming, (string, int), (override));
