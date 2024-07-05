@@ -2,10 +2,14 @@
 #include "gmock/gmock.h"
 #include "../CTeamTradingSystem-53476/Application.cpp"
 #include "../CTeamTradingSystem-53476/StockBrockerDriver.h"
+#include "../CTeamTradingSystem-53476/KiwerAPI.cpp"
+#include "../CTeamTradingSystem-53476/NemoAPI.cpp"
+#include <string>
+using namespace testing;
 
 class MockDriver : public StockBrockerDriver {
 public:
-	MOCK_METHOD(void, loginBrocker, (string, string), (override));
+	MOCK_METHOD(void, login, (string, string), (override));
 	MOCK_METHOD(void, buyStock, (string, int, int), (override));
 	MOCK_METHOD(void, sellStock, (string, int, int), (override));
 	MOCK_METHOD(int, getPrice, (string), (override));
@@ -24,6 +28,12 @@ public:
 	const int MAX_BUY_CNT = 10;
 };
 
+TEST_F(TestFixture, SellStock) {
+	EXPECT_CALL(mk, sellStock, ("stockid", 1000, 10), ())
+		.Times(1);
+	app->sell("stockid", 1000, 10);
+}
+
 TEST_F(TestFixture, MakeApplicationInstance) {
 	EXPECT_TRUE(app != nullptr);
 }
@@ -37,12 +47,6 @@ TEST_F(TestFixture, BuyStock) {
 	EXPECT_CALL(mk, buyStock, ("stockid", 1000, 10), ())
 		.Times(1);
 	app->buy("stockid", 1000, 10);
-}
-
-TEST_F(TestFixture, SellStock) {
-	EXPECT_CALL(mk, sellStock, ("stockid", 1000, 10), ())
-		.Times(1);
-	app->sell("stockid", 1000, 10);
 }
 
 TEST_F(TestFixture, GetPrice) {

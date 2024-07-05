@@ -1,9 +1,11 @@
 #pragma once
+
 #include <iostream>
 #include <cstdlib>
 #include <string>
-
+#include "StockBrockerDriver.h"
 using namespace std;
+
 class KiwerAPI {
 public:
 	void login(string ID, string password) {
@@ -23,4 +25,23 @@ public:
 		int ret = rand() % 10 * 100 + 5000;
 		return ret;
 	}
+};
+
+class KiwerDriver : public StockBrockerDriver
+{
+public:
+	KiwerDriver(KiwerAPI kAPI) : kiwerAPI{ kAPI }
+	{
+
+	}
+	void sellStock(string stockCode, int price, int num) override
+	{
+		kiwerAPI.sell(stockCode, price, num);
+	}
+	void login(string ID, string password) override
+	{
+		kiwerAPI.login(ID, password);
+	}
+private:
+	KiwerAPI kiwerAPI;
 };
