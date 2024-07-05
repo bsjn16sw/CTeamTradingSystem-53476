@@ -9,16 +9,19 @@ public:
 	MOCK_METHOD(void, buyStock, (string, int, int), (override));
 	MOCK_METHOD(void, sellStock , (string, int, int), (override));
 	MOCK_METHOD(int, getPrice, (string), (override));
+	MOCK_METHOD(pair<int, int>, buyStockNiceTiming, (string, int), (override));
+	MOCK_METHOD(pair<int, int>, sellStockNiceTiming, (string, int), (override));
 };
 
 class TestFixture : public testing::Test {
 public:
 	void SetUp() override {
-		app.selectStockBrocker(&mk);
-		app.login("userid", "userpasswd");
+		app->selectStockBrocker(&mk);
+		app->login("userid", "userpasswd");
 	}
 	Application* app = new Application();
 	MockDriver mk;
+	const int MAX_BUY_CNT = 10;
 };
 
 TEST_F(TestFixture, MakeApplicationInstance) {
@@ -31,19 +34,19 @@ TEST_F(TestFixture, LoginStockBrocker) {
 }
 
 TEST_F(TestFixture, BuyStock) {
-	app.buy("stockid", 1000, 10);
+	app->buy("stockid", 1000, 10);
 	EXPECT_CALL(mk, buyStock, ("stockid", 1000, 10), ())
 		.Times(1);
 }
 
 TEST_F(TestFixture, SellStock) {
-	app.sell("stockid", 1000, 10);
+	app->sell("stockid", 1000, 10);
 	EXPECT_CALL(mk, sellStock, ("stockid", 1000, 10), ())
 		.Times(1);
 }
 
 TEST_F(TestFixture, GetPrice) {
-	int ret = app.getPrice("stockid");
+	int ret = app->getPrice("stockid");
 	EXPECT_CALL(mk, getPrice, ("stockid"), ())
 		.Times(1)
 		.WillRepeatedly(12345);
